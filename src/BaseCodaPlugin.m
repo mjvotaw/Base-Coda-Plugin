@@ -65,6 +65,13 @@
 
 #pragma mark - Menu methods
 
+/** Opens a File prompt for the user to select a file to open.
+
+Returns an NSURL * to the chosen file, or nil.
+ 
+ @returns NSURL * chosenFile
+ */
+
 -(NSURL *) getFileNameFromUser
 {
     NSURL * chosenFile = nil;
@@ -105,10 +112,17 @@
     return chosenFile;
 }
 
+/** Opens a Save file prompt for the user to select a file.
+ 
+ Returns an NSURL * to the chosen file, or nil.
+ 
+ @returns NSURL * chosenFile
+ */
+
 -(NSURL *) getSaveNameFromUser
 {
     NSURL * chosenFile = nil;
-    // Create the File Open Dialog class.
+    // Create the File Save Dialog class.
     NSSavePanel* saveDlg = [NSSavePanel savePanel];
     
     if([_controller respondsToSelector:@selector(siteLocalPath)])   //Coda 2.5
@@ -131,27 +145,15 @@
 
 
 #pragma mark - persistant storage methods
-/* these methods can be used to store files in NSHomeDirectory(), to protect these files from being deleted when plugins/Coda are updated. 
+/* These methods can be used to store files in NSHomeDirectory(), to protect these files from being deleted when plugins or Coda are updated.
  */
 
--(BOOL) doesPersistantFileExist:(NSString *)path
-{
-    NSFileManager* fileManager = [NSFileManager defaultManager];
-	NSURL * url = [self urlForPeristantFilePath:path];
-    return  [fileManager fileExistsAtPath:[url path]];
-}
-
--(BOOL) doesPersistantStorageDirectoryExist
-{
-    return [self doesPersistantFileExist:@""];
-}
-
--(NSURL *) urlForPeristantFilePath:(NSString *)path
-{
-    NSURL * url = [NSURL fileURLWithPath:NSHomeDirectory()];
-    url = [url URLByAppendingPathComponent:[NSString stringWithFormat:@".%@/%@", [self name], path]];
-    return url;
-}
+/** Creates a directory in NSHomeDirectory() (usually /Users/[current user name]) based on the plugin's name (taken from [self name]).
+ 
+    For example, a plugin with the name Capitalize would created a directory called ~/.Capitalize
+ 
+    @returns NSError * any error when creating directory, or nil if directory created successfully.
+ */
 
 -(NSError *) createPersistantStorageDirectory
 {
@@ -161,6 +163,52 @@
     [fileManager createDirectoryAtURL:url withIntermediateDirectories:NO attributes:nil error:&error];
     return error;
 }
+
+/** Checks if the given filename or relative filepath exists inside the Persistant directory.
+ 
+ @returns BOOL fileExists
+ */
+
+-(BOOL) doesPersistantFileExist:(NSString *)path
+{
+    NSFileManager* fileManager = [NSFileManager defaultManager];
+	NSURL * url = [self urlForPeristantFilePath:path];
+    return  [fileManager fileExistsAtPath:[url path]];
+}
+
+/** Checks if a persistant directory for the given plugin has been creates.
+ 
+ @returns BOOL persistantFileExists
+ */
+
+-(BOOL) doesPersistantStorageDirectoryExist
+{
+    return [self doesPersistantFileExist:@""];
+}
+
+/** Returns an NSURL to the given filename or relative path within the plugin's persistant storage directory.
+ 
+ Note that this method does not actually check for the existance of the filepath.
+ 
+ @returns NSURL filepath
+ */
+
+-(NSURL *) urlForPeristantFilePath:(NSString *)path
+{
+    NSURL * url = [NSURL fileURLWithPath:NSHomeDirectory()];
+    url = [url URLByAppendingPathComponent:[NSString stringWithFormat:@".%@/%@", [self name], path]];
+    return url;
+}
+
+
+/** Copies the content at the given filepath to the plugin's persistant storage directory.
+
+Files will be given the same filenames.
+ 
+ @param NSString * path: a path to a filename.
+ 
+ @returns NSError * any errors thrown while copying files, or nil if success.
+ */
 
 -(NSError *) copyFileToPersistantStorage:(NSString *)path
 {
@@ -193,6 +241,16 @@
 #pragma mark - url/path helper methods
 
 
+/** Normalizes paths.
+ 
+ For example, /Volumes/Macintosh HD/Users/michael/Documents and /Users/michael/Documents both point to the same directory, but their paths are slightly different. This method normalizes each,  and in this case would return "/Users/michael/Documents" for both.
+ 
+ @param NSString * path: a filepath to be resolved.
+ 
+ @returns NSString * newPath: a resolved path.
+ 
+ */
+
 -(NSString *) getResolvedPathForPath:(NSString *)path
 {
     NSURL * url = [NSURL fileURLWithPath:path];
@@ -202,6 +260,13 @@
 }
 
 #pragma mark - NSUserNotification
+
+/** Creates a notification with the given title and message. If NSUserNotification is not present, it will fall back to Growl.
+ 
+    @param NSString * title
+    @param NSString * message
+ */
+
 -(void) sendUserNotificationWithTitle:(NSString *)title andMessage:(NSString *)message
 {
     if(NSClassFromString(@"NSUserNotification"))
@@ -213,6 +278,14 @@
     	[GrowlApplicationBridge notifyWithTitle:title description:message notificationName:@"GrowlCompleteUpload" iconData:nil priority:0 isSticky:false clickContext:nil];
     }
 }
+
+/** Creats a notification with the given title, sound, and message. If NSUserNotification is not present, it will fall back to Growl.
+ 
+ @param NSString * title
+ @param NSString * sound path to a sound to play (or nil). NSUserNotificationDefaultSoundName will play a default sound
+ @param NSString * message
+
+*/
 
 -(void) sendUserNotificationWithTitle:(NSString *)title sound:(NSString *)sound andMessage:(NSString * ) message
 {
@@ -245,6 +318,15 @@
 
 #pragma mark - OS X compatability methods
 
+/** A convenience method for loading nib, returning the desired nibClass.
+ 
+    @param NSString * nibName
+    @param Class nibClass
+ 
+ @returns id the nib Class, or nil if not found
+ 
+ */
+
 -(id) getNibNamed:(NSString *)nibName forClass:(Class)nibClass
 {
     NSArray * nibObjects = [self loadNibNamed:nibName];
@@ -257,6 +339,13 @@
     }
     return nil;
 }
+
+/** A single method for loading nib files on 10.7 or 10.8+ 
+    
+    @param NSString * nibName
+ 
+    @returns NSArray * nibObjects loaded by bundle.
+ */
 
 -(NSArray *) loadNibNamed:(NSString *)nibName
 {
@@ -276,8 +365,13 @@
 }
 
 
-#pragma mark - other helpers
+#pragma mark - other compatability helpers
 
+
+/** A convenience method to determine if a site is currently open, supports both Coda 2.0 and 2.5
+ 
+    @returns BOOL isSiteOpen
+ */
 -(BOOL) isSiteOpen
 {
     BOOL isSiteOpen = false;
@@ -293,6 +387,11 @@
     return isSiteOpen;
 }
 
+/** Gets current siteUUID. In Coda 2.0, siteNickname will be used instead of siteUUID.
+ 
+    @returns NSString * siteUUID, or nil if no site is open.
+ */
+
 -(NSString *) getCurrentSiteUUID
 {
     if([_controller respondsToSelector:@selector(siteUUID)]) //Coda 2.5+
@@ -306,6 +405,9 @@
     
 	return nil;
 }
+
+
+
 -(NSString *) updateCurrentSiteUUID;
 {
     //if siteUUID is not available, that means that this is Coda 2.0
