@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		4C6020601AD42245006C5F4B /* BaseCodaPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C60205E1AD42245006C5F4B /* BaseCodaPlugin.m */; };
-		4C6020701AD429BD006C5F4B /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C60206D1AD429BD006C5F4B /* Growl.framework */; };
-		4C6020711AD429BD006C5F4B /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4C60206F1AD429BD006C5F4B /* Growl.framework */; };
+		4CC7611E1AD4672F00915777 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7611B1AD4672F00915777 /* Growl.framework */; };
+		4CC7611F1AD4672F00915777 /* Growl.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CC7611D1AD4672F00915777 /* Growl.framework */; };
 		8D5B49B0048680CD000E48DA /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C167DFE841241C02AAC07 /* InfoPlist.strings */; };
 		8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7ADFEA557BF11CA2CBB /* Cocoa.framework */; };
 		F163D8F50C67D694000A99F5 /* ExamplePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = F163D8F40C67D694000A99F5 /* ExamplePlugin.m */; };
@@ -24,8 +24,8 @@
 		4C60205D1AD42245006C5F4B /* BaseCodaPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BaseCodaPlugin.h; path = ../../src/BaseCodaPlugin.h; sourceTree = "<group>"; };
 		4C60205E1AD42245006C5F4B /* BaseCodaPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BaseCodaPlugin.m; path = ../../src/BaseCodaPlugin.m; sourceTree = "<group>"; };
 		4C60205F1AD42245006C5F4B /* CodaPlugInsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CodaPlugInsController.h; path = ../../src/CodaPlugInsController.h; sourceTree = "<group>"; };
-		4C60206D1AD429BD006C5F4B /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Growl.framework; path = ../../src/Growl.framework; sourceTree = "<group>"; };
-		4C60206F1AD429BD006C5F4B /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
+		4CC7611B1AD4672F00915777 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
+		4CC7611D1AD4672F00915777 /* Growl.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Growl.framework; sourceTree = "<group>"; };
 		8D5B49B6048680CD000E48DA /* Example Coda Plugin.codaplugin */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Example Coda Plugin.codaplugin"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D5B49B7048680CD000E48DA /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D2F7E65807B2D6F200F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
@@ -38,9 +38,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C6020701AD429BD006C5F4B /* Growl.framework in Frameworks */,
+				4CC7611E1AD4672F00915777 /* Growl.framework in Frameworks */,
 				8D5B49B4048680CD000E48DA /* Cocoa.framework in Frameworks */,
-				4C6020711AD429BD006C5F4B /* Growl.framework in Frameworks */,
+				4CC7611F1AD4672F00915777 /* Growl.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,19 +127,18 @@
 		4C6020671AD42445006C5F4B /* Growl */ = {
 			isa = PBXGroup;
 			children = (
-				4C60206D1AD429BD006C5F4B /* Growl.framework */,
-				4C60206E1AD429BD006C5F4B /* Legacy */,
+				4CC7611B1AD4672F00915777 /* Growl.framework */,
+				4CC7611C1AD4672F00915777 /* Legacy */,
 			);
 			name = Growl;
 			sourceTree = "<group>";
 		};
-		4C60206E1AD429BD006C5F4B /* Legacy */ = {
+		4CC7611C1AD4672F00915777 /* Legacy */ = {
 			isa = PBXGroup;
 			children = (
-				4C60206F1AD429BD006C5F4B /* Growl.framework */,
+				4CC7611D1AD4672F00915777 /* Growl.framework */,
 			);
-			name = Legacy;
-			path = ../../src/Legacy;
+			path = Legacy;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
